@@ -33,6 +33,6 @@ export function checkAuth(activeUser){
     //is the current login valid
 }
 
-export function register(email, password){
+export function register(displayName, email, password){
     //return promise of true or error string, don't auto login if true, user will be prompted to login if true
 }

@@ -7,7 +7,8 @@ import { BrowserRouter, Routes , Route} from 'react-router';
 
 import NoPage from './pages/NoPage';
 import Login from './pages/Login';
-import Home from './pages/Home'
+import Home from './pages/Home';
+import Register from './pages/Register';
 
 function App() {
   const [activeUser, setActiveUser] = useState(null);
@@ -20,6 +21,7 @@ function App() {
         <Routes>
           <Route path="/" element={< Home/>}/>
           <Route path="login" element={< Login/>}/>
+          <Route path="register" element={<Register/>}/>
           <Route path="*" element = {< NoPage/>}/>
         </Routes>
       </BrowserRouter>
