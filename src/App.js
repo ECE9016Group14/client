@@ -5,6 +5,8 @@ import { ActiveUserContext } from './models/activeUser';
 import NavBar from './NavBar/NavBar';
 import { BrowserRouter, Routes , Route} from 'react-router';
 
+import NoPage from './pages/NoPage';
+import Login from './pages/Login';
 import Home from './pages/Home'
 
 function App() {
@@ -17,6 +19,8 @@ function App() {
         <NavBar/>
         <Routes>
           <Route path="/" element={< Home/>}/>
+          <Route path="login" element={< Login/>}/>
+          <Route path="*" element = {< NoPage/>}/>
         </Routes>
       </BrowserRouter>
     </ActiveUserContext.Provider>
