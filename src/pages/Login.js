@@ -1,6 +1,6 @@
-import { Navigate } from "react-router";
+import { Navigate, useNavigate } from "react-router";
 
-import { login, ActiveUserContext } from "../models/activeUser";
+import { login, sessionContext } from "../models/session";
 import { useContext } from "react";
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
@@ -11,26 +11,29 @@ import { Link, NavLink } from 'react-router';
 
 
 function Login() {
-  const { activeUser, setActiveUser } = useContext(ActiveUserContext);
-  if (activeUser) {
-    //Redirect if logged in
-    return <Navigate replace to="/"/>
-  }
+  const { session, setSession } = useContext(sessionContext);
+  let navigate = useNavigate()
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     event.stopPropagation();
     let email = event.target.email.value;
     let password = event.target.password.value;
-    console.log(`Email:${email}, Pass:${password}`)
+    //console.log(`Email:${email}, Pass:${password}`)
 
-    let result = await login(email,password);
-    if (!result){
-      alert("Username or Password Incorrect")
+    let result = await login(setSession,email,password);
+    if (result instanceof Error){
+      alert(result.message)
     }else{
-      setActiveUser(await result)
+      //do nothing, login function should've changed state
+      navigate("/")
     }
   };
+
+  if (session) {
+    //Redirect if logged in
+    return <Navigate replace to="/"/>
+  }
 
   return (
     <div className="loginArea">

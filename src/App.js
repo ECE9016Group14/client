@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import { useState } from 'react';
-import { ActiveUserContext } from './models/activeUser';
+import { sessionContext , checkCookies} from './models/session';
 import NavBar from './NavBar/NavBar';
 import { BrowserRouter, Routes , Route} from 'react-router';
 
@@ -11,11 +11,12 @@ import Home from './pages/Home';
 import Register from './pages/Register';
 
 function App() {
-  const [activeUser, setActiveUser] = useState(null);
-
+  const [session, setSession] = useState(undefined);
+  checkCookies(setSession)
+  
   return (
     <div className="App">
-    <ActiveUserContext.Provider value={{ activeUser: activeUser, setActiveUser: setActiveUser }}>
+    <sessionContext.Provider value={{ session, setSession }}>
       <BrowserRouter>
         <NavBar/>
         <Routes>
@@ -25,7 +26,7 @@ function App() {
           <Route path="*" element = {< NoPage/>}/>
         </Routes>
       </BrowserRouter>
-    </ActiveUserContext.Provider>
+    </sessionContext.Provider>
     </div>
   );
 }

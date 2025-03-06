@@ -7,21 +7,20 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import { Link, NavLink } from 'react-router';
 
 
-import { logout, ActiveUserContext } from "../models/activeUser";
+import { logout, sessionContext } from "../models/session";
 import { useContext } from "react";
 
 import { useNavigate } from "react-router";
 
 function LoginComponent(){
-  const { activeUser, setActiveUser } = useContext(ActiveUserContext);
+  const { session, setSession } = useContext(sessionContext);
 
   let logoutHandler = () =>{
-    setActiveUser(undefined)
-    logout(activeUser)
+    logout(setSession, session)
   }
 
-  if (activeUser){
-    let user_name = activeUser.displayName
+  if (session){
+    let user_name = session.displayName
     let greeting = `Hello ${user_name}`
     return(
       <NavDropdown title={greeting} id="basic-nav-dropdown">

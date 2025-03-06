@@ -1,4 +1,4 @@
-import { register, ActiveUserContext } from "../models/activeUser";
+import { register, sessionContext } from "../models/session";
 import { useContext } from "react";
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
@@ -10,7 +10,7 @@ import './Register/Register.css'
 
 
 function Register() {
-  const { activeUser, setActiveUser } = useContext(ActiveUserContext);
+  const { activeUser, setActiveUser } = useContext(sessionContext);
   let navigate = useNavigate();
   if (activeUser) {
     //Redirect if logged in
