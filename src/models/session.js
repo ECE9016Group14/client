@@ -39,9 +39,9 @@ export function login(setSession, email, password){
     //use setSession to set new state, and return promise of true or error string
     console.log(`Email:${email}, Pass:${password}`)
     if(password === "dev"){
-        setSession(new Session("undefined", "devman"))
         return new Promise((resolve, reject) => {
             setTimeout(() => {
+                setSession(new Session("undefined", "devman"))
                 resolve(true);
             }, 1000);
         });

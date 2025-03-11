@@ -13,6 +13,10 @@ export function getHomePosts(setPosts){
     //get the posts for the home page, return promise
     //on success promise resolves to true, and setPosts is used to modify state
     //setPosts takes a list of post objects
+
+    return new Promise((resolve, reject) => {
+        //TODO 
+    })
 }
 
 export function getPostByID(setPost, postID){
