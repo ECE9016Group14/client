@@ -9,6 +9,7 @@ import NoPage from './pages/NoPage';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import Register from './pages/Register';
+import PostPage  from './pages/PostPage';
 
 function App() {
   const [session, setSession] = useState(undefined);
@@ -23,6 +24,7 @@ function App() {
           <Route path="/" element={< Home/>}/>
           <Route path="login" element={< Login/>}/>
           <Route path="register" element={<Register/>}/>
+          <Route path="p/:postID" element={<PostPage/>}/>
           <Route path="*" element = {< NoPage/>}/>
         </Routes>
       </BrowserRouter>

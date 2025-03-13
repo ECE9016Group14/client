@@ -1,5 +1,5 @@
 import { PostListing } from "../components/PostListing";
-import { getHomePosts, Post } from "../models/post"
+import { getHomePosts } from "../models/post"
 import { useState } from 'react';
 
 export default function Home(){

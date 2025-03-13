@@ -47,8 +47,9 @@ export function getHomePosts(setPosts){
 
     return new Promise(async (resolve, reject) => {
         try{
-            const posts = parseFromJson(await(await fetch('./MOCK_POSTS.json')).text())
+            const posts = parseFromJson(await(await fetch('/MOCK_POSTS.json')).text())
             setPosts(posts)
+            resolve(true)
         }catch(e){
             console.log(e)
             resolve(new Error("Failed to retrieve posts."))
@@ -60,10 +61,22 @@ export function getPostByID(setPost, postID){
     //gets a specific post by its id
     //on success promise resolves to true, and setPost is used to modify state
     //setPost takes a single post object
+
+    //for demo reasons, just gets the first post
+    return new Promise(async (resolve, reject) => {
+        try{
+            const posts = parseFromJson(await(await fetch('/MOCK_POSTS.json')).text())
+            setPost(posts[0])
+            resolve(true)
+        }catch(e){
+            console.log(e)
+            resolve(new Error("Failed to retrieve posts."))
+        }
+    })
 }
 
-export function getPostsByPosterName(setPosts, posterName){
-    //gets all posts from a specific account name
+export function getPostsByPosterID(setPosts, posterID){
+    //gets all posts from a specific account
     //on success promise resolves to true, and setPosts is used to modify state
     //setPosts takes a list of post objects
 }
