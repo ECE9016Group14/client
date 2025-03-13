@@ -2,7 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import { useState } from 'react';
 import { sessionContext , checkCookies} from './models/session';
-import NavBar from './NavBar/NavBar';
+import NavBar from './components/NavBar';
 import { BrowserRouter, Routes , Route} from 'react-router';
 
 import NoPage from './pages/NoPage';
