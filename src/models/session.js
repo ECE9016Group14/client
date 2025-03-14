@@ -15,11 +15,13 @@ Usage:
 
 const TOKEN_COOKIE_NAME = "sessionToken"
 const DISTPLAY_NAME_COOKIE_NAME = "displayName"
+const USER_ID_COOKIE_NAME = "userID"
 
 export const Session = class{
-    constructor(token, displayName){
+    constructor(token, displayName, userID){
         this.token = token;
         this.displayName = displayName;
+        this.userID = userID
 
         Cookies.set(TOKEN_COOKIE_NAME, token, { 
             expires: 7, 
@@ -28,6 +30,12 @@ export const Session = class{
         })
 
         Cookies.set(DISTPLAY_NAME_COOKIE_NAME, displayName, { 
+            expires: 7, 
+            secure: true,
+            sameSite: 'strict'
+        })
+
+        Cookies.set(USER_ID_COOKIE_NAME, userID, { 
             expires: 7, 
             secure: true,
             sameSite: 'strict'
@@ -41,7 +49,7 @@ export function login(setSession, email, password){
     if(password === "dev"){
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                setSession(new Session("undefined", "devman"))
+                setSession(new Session("undefined", "devman","2d102b91-883a-4a73-8f84-ade956e9e282"))
                 resolve(true);
             }, 1000);
         });
@@ -59,6 +67,7 @@ export function logout(setSession, session){
     setSession(undefined)
     Cookies.remove(TOKEN_COOKIE_NAME)
     Cookies.remove(DISTPLAY_NAME_COOKIE_NAME)
+    Cookies.remove(USER_ID_COOKIE_NAME)
 }
 
 export function checkAuth(setSession, session){
