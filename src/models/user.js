@@ -40,5 +40,9 @@ export function changeRemark(setSession, session, newRemark){
     //returns promise
         //On success, promise resolves to true
         //On fail, promise resolves to error with message
-        //if session expired, pass undefined into setSession and alert user
+        //if session expired, call logout in session.js
+
+    return new Promise(async (resolve)=>{
+        resolve(true)
+    } )
 }

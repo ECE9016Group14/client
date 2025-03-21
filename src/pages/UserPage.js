@@ -1,5 +1,5 @@
 import { useParams } from "react-router"
-import { getUser, User } from "../models/user"
+import { changeRemark, getUser, User } from "../models/user"
 import { Session } from "../models/session"
 
 import { useState } from 'react';
@@ -8,6 +8,8 @@ import { useContext } from "react";
 import { getPostsByPosterID, Post } from "../models/post";
 import PostPage from "./PostPage";
 import { PostListing } from "../components/PostListing";
+import { Button, Form } from "react-bootstrap";
+
 
 
 export default function UserPage(){
@@ -15,6 +17,23 @@ export default function UserPage(){
     const [user, setUser] = useState (undefined)
     const [posts, setPosts] = useState (undefined)
     const { session, setSession } = useContext(sessionContext)
+
+    const handleRemarkChange = async (event) => {
+        //called when the logged in user hits save
+        event.preventDefault();
+        event.stopPropagation();
+        let new_remark = event.target.remark.value
+
+        let result = await changeRemark(setSession, session, new_remark)
+        if (result instanceof Error){
+            alert(result.message)
+        }else{
+            let newUser = user
+            newUser.remark = new_remark
+            setUser(newUser)
+            alert("Remark Updated!")
+        }
+    }
 
     getUser(setUser, userID)
 
@@ -37,7 +56,12 @@ export default function UserPage(){
 
     if(isLoggedInUser){
         //let the user change their remark
-        remarksSection = <p>TODO</p>
+        remarksSection = <Form onSubmit={handleRemarkChange}>
+            <Form.Control as="textarea" rows={3} name="remark">
+                {user.remark}
+            </Form.Control>
+            <Button type="submit" className="mt-5">Update Remark</Button>
+        </Form>
     }
 
     getPostsByPosterID(setPosts,user.id)
