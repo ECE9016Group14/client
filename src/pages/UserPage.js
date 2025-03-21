@@ -5,7 +5,7 @@ import { Session } from "../models/session"
 import { useState } from 'react';
 import { sessionContext } from "../models/session";
 import { useContext } from "react";
-import { getPostsByPosterID, Post } from "../models/post";
+import { deletePost, getPostsByPosterID, Post } from "../models/post";
 import PostPage from "./PostPage";
 import { PostListing } from "../components/PostListing";
 import { Button, Form } from "react-bootstrap";
@@ -32,6 +32,17 @@ export default function UserPage(){
             newUser.remark = new_remark
             setUser(newUser)
             alert("Remark Updated!")
+        }
+    }
+
+    const handleDeletePost = async(postID) =>{
+        let result = await deletePost(setSession,session,postID)
+        if(result instanceof Error){
+            alert(result.message)
+        }else{
+            //since the list of posts changed, get the new list
+            alert(`Deleted Post ${postID}`)
+            getPostsByPosterID(setPosts,user.id)
         }
     }
 
@@ -77,7 +88,7 @@ export default function UserPage(){
             postSection.push(<PostListing post={post}/>)
             if(isLoggedInUser){
                 //Add button that lets user delete post
-                postSection.push(<p>Todo</p>)
+                postSection.push(<Button onClick={()=>handleDeletePost(post.id)}>Delete</Button>)
             }
         }
     }

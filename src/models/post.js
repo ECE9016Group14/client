@@ -95,7 +95,7 @@ export function getPostsByPosterID(setPosts, posterID){
     })
 }
 
-export function postPost(session, title, content){
+export function postPost(setSession, session, title, content){
     //submit a new post
     //title and content are strings, session is Session object
     //server should init remaining fields
@@ -103,8 +103,11 @@ export function postPost(session, title, content){
     //on success promise resolves to new posts id (for redirect to post)
 }
 
-export function deletePost(session, postID){
+export function deletePost(setSession, session, postID){
     //remove a post
     //return promise
     //oon success promise resolves to true
+    return new Promise(async (resolve) => {
+        resolve(true)
+    })
 }
