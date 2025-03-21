@@ -1,7 +1,8 @@
 import { sqlToJsDate } from "../utils"
 
-export function Post(ID, PosterName, NumLikes, PostTime, Title, Content){
+export function Post(ID, PosterID, PosterName, NumLikes, PostTime, Title, Content){
     this.id = ID
+    this.posterID = PosterID
     this.posterName = PosterName
     this.numLikes = NumLikes
     this.postTime = PostTime
@@ -20,6 +21,7 @@ function parseFromJson(json){
         for (let thisPost of data){
             results.push(new Post(
                 thisPost.ID,
+                thisPost.PosterID,
                 thisPost.PosterName,
                 thisPost.NumLikes,
                 sqlToJsDate(thisPost.PostTime),
@@ -31,6 +33,7 @@ function parseFromJson(json){
     }else{
         return new Post(
             data.ID,
+            data.PosterID,
             data.PosterName,
             data.NumLikes,
             sqlToJsDate(data.PostTime),

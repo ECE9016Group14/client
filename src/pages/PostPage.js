@@ -9,12 +9,9 @@ import { useContext } from "react";
 export default function PostPage(){
     let {postID} = useParams()
     const [post, setPost] = useState(undefined)
-    const [poster, setPoster] = useState (undefined)
     const { session, setSession } = useContext(sessionContext)
 
     getPostByID(setPost, postID)
-
-    //TODO retrieve poster details
 
     if(!post){
         return <h1>Loading ...</h1>
@@ -24,10 +21,8 @@ export default function PostPage(){
         return <h1>Error: Received data of unexpected type.</h1>
     }
 
-    let authorDetails = <p>Unable to retrieve author details.</p>
-    if (poster != undefined){
-        //TODO
-    }
+    let authorLink = `/u/${post.posterID}`
+    let authorDetails = <NavLink to={authorLink}>Written by {post.posterName}</NavLink>
 
     let likeAndComentArea = <p>Login to like or coment.</p>
     if (session){
