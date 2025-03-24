@@ -22,15 +22,21 @@ function LoginComponent(){
   if (session){
     let user_name = session.displayName
     let greeting = `Hello ${user_name}`
+    let myLink = `/u/${session.userID}`
     return(
-      <NavDropdown title={greeting} id="basic-nav-dropdown">
-        <NavDropdown.Item>
-          <NavLink to="/">Preferences</NavLink>
-        </NavDropdown.Item>
-        <NavDropdown.Item onClick={logoutHandler}>
-          Logout
-        </NavDropdown.Item>
-      </NavDropdown>
+      <div>
+        <Link to="/new">
+        New Post
+        </Link>
+        <NavDropdown title={greeting} id="basic-nav-dropdown">
+          <NavDropdown.Item>
+            <NavLink to={myLink}>Preferences</NavLink>
+          </NavDropdown.Item>
+          <NavDropdown.Item onClick={logoutHandler}>
+            Logout
+          </NavDropdown.Item>
+        </NavDropdown>
+      </div>
     )
   }else{
     return(

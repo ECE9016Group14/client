@@ -11,6 +11,7 @@ import Home from './pages/Home';
 import Register from './pages/Register';
 import PostPage  from './pages/PostPage';
 import UserPage from './pages/UserPage';
+import NewPost from './pages/NewPost';
 
 function App() {
   const [session, setSession] = useState(undefined);
@@ -28,6 +29,7 @@ function App() {
           <Route path="/" element={< Home/>}/>
           <Route path="login" element={< Login/>}/>
           <Route path="register" element={<Register/>}/>
+          <Route path="new" element={<NewPost/>}/>
           <Route path="p/:postID" element={<PostPage/>}/>
           <Route path="u/:userID" element={<UserPage/>}/>
           <Route path="*" element = {< NoPage/>}/>

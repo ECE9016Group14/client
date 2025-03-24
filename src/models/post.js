@@ -101,6 +101,11 @@ export function postPost(setSession, session, title, content){
     //server should init remaining fields
     //return promise
     //on success promise resolves to new posts id (for redirect to post)
+    //on fail promise resolved to error with appropriate message, if necessary call session.logout() for invalid session
+    return new Promise(async (resolve) =>{
+        resolve("junkPath")
+    })
+
 }
 
 export function deletePost(setSession, session, postID){
