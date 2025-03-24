@@ -6,14 +6,19 @@ import moment from "moment";
 import { sessionContext } from "../models/session";
 import { useContext } from "react";
 import { getCommentsFromPostID } from "../models/comment";
+import { didILikeThis, like, unLike } from "../models/like";
+import { Button } from "react-bootstrap";
 
 export default function PostPage(){
     let {postID} = useParams()
     const [post, setPost] = useState(undefined)
+    const [liked, setLiked] = useState(undefined)
     const [comments,setComments] = useState(undefined)
     const { session, setSession } = useContext(sessionContext)
 
-    getPostByID(setPost, postID)
+    if(! post instanceof Post){
+        getPostByID(setPost, postID)
+    }
     
     if(!post){
         return <h1>Loading ...</h1>
@@ -24,9 +29,47 @@ export default function PostPage(){
     }
 
     getCommentsFromPostID(setComments, postID)
+    if(liked == undefined){
+        let likedResult = didILikeThis(setSession, session, postID)
+        likedResult.then((x)=>{
+            if(x){
+                setLiked(true)
+            }else{
+                setLiked(false)
+            }
+        })
+    }
 
     let authorLink = `/u/${post.posterID}`
     let authorDetails = <NavLink to={authorLink}>Written by {post.posterName}</NavLink>
+
+    const handleLike = async ()=> {
+        let result = await like(setSession, session, postID)
+        setLiked(result)
+        if (result == true){
+            let updated_post = post
+            updated_post.numLikes += 1
+            setPost(updated_post)
+            console.log("like")
+        }
+    }
+    const handleUnlike = async ()=> {
+        let result = await unLike(setSession, session, postID)
+        setLiked(!result)
+        if (result == true){
+            let updated_post = post
+            updated_post.numLikes -= 1
+            setPost(updated_post)
+            console.log("unlike")
+        }
+    }
+
+    let likeElement = <p>Loading...</p>
+    if (liked == true){
+        likeElement = <Button onClick={handleUnlike}>Unlike</Button>
+    }else if (liked == false){
+        likeElement = <Button onClick={handleLike}>Like</Button>
+    }
 
     let likeAndCommentArea = <p>Login to like or comment.</p>
     if (session){
@@ -68,6 +111,7 @@ export default function PostPage(){
             {authorDetails}
             <p>{post.content}</p>
             {stats}
+            {likeElement}
             {likeAndCommentArea}
             {dispComments}
         </div>
