@@ -5,9 +5,9 @@ import { Link, NavLink } from 'react-router';
 import moment from "moment";
 import { sessionContext } from "../models/session";
 import { useContext } from "react";
-import { getCommentsFromPostID } from "../models/comment";
+import { Comment, getCommentsFromPostID, postComment } from "../models/comment";
 import { didILikeThis, like, unLike } from "../models/like";
-import { Button } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 
 export default function PostPage(){
     let {postID} = useParams()
@@ -27,8 +27,10 @@ export default function PostPage(){
     }else if (!post instanceof Post){
         return <h1>Error: Received data of unexpected type.</h1>
     }
-
-    getCommentsFromPostID(setComments, postID)
+    if(comments == undefined){
+        getCommentsFromPostID(setComments, postID)
+    }
+    
     if(liked == undefined){
         let likedResult = didILikeThis(setSession, session, postID)
         likedResult.then((x)=>{
@@ -50,7 +52,6 @@ export default function PostPage(){
             let updated_post = post
             updated_post.numLikes += 1
             setPost(updated_post)
-            console.log("like")
         }
     }
     const handleUnlike = async ()=> {
@@ -60,8 +61,29 @@ export default function PostPage(){
             let updated_post = post
             updated_post.numLikes -= 1
             setPost(updated_post)
-            console.log("unlike")
         }
+    }
+    const handleComment = async (event) =>{
+        event.preventDefault();
+        event.stopPropagation();
+        let commentText = event.target.comment.value
+        event.target.comment.disabled = true
+        console.log("test")
+
+        let result = await postComment(setSession,session, postID, commentText)
+
+        if(result instanceof Error){
+            alert(result.message)
+        }else{
+            let updated_comments = Array.from(comments) //forces clone
+            updated_comments.unshift(
+                new Comment(undefined, undefined, session.displayName,Date.now(), undefined, commentText)
+            )
+            setComments(updated_comments)
+        }
+        event.target.comment.value = ""
+        event.target.comment.disabled = false
+
     }
 
     let likeElement = undefined
@@ -69,11 +91,18 @@ export default function PostPage(){
 
     let likeAndCommentArea = <p>Login to like or comment.</p>
     if (session){
+        //like stuff
         if (liked == true){
             likeElement = <Button onClick={handleUnlike}>Unlike</Button>
         }else if (liked == false){
             likeElement = <Button onClick={handleLike}>Like</Button>
         }
+
+        //comment stuff
+        likeAndCommentArea = <Form onSubmit={handleComment}>
+            <Form.Control as="textarea" placeholder = "Comment" rows={3} name="comment"/>
+            <Button type="submit" className="mt-5">Post Comment</Button>
+        </Form>
     }
 
     let dispComments = <p>Loading Comments...</p>
@@ -82,15 +111,17 @@ export default function PostPage(){
     }else if(comments instanceof Error){
         dispComments = <p>{comments.message}</p>
     }else if(
-        !comments instanceof Array ||(
+        !(comments instanceof Array) ||(
             comments.length != 0 &&
-            comments[0] instanceof Comment
+            !(comments[0] instanceof Comment)
         )
     ){
+        console.log(comments)
         dispComments = <p>Error: Received data of unexpected type.</p>
     }else if(comments.length == 0){
         dispComments = <p>No comments yet.</p>
     }else {
+        console.log(comments)
         dispComments = []
         for (let x of comments){
             dispComments.push(
