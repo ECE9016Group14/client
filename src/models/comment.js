@@ -25,8 +25,8 @@ function parseFromJson(json){
                 comment.PosterID,
                 comment.PosterName,
                 sqlToJsDate( comment.PostTime),
-                comment.parentPostID,
-                comment.content
+                comment.ParentPostID,
+                comment.Content
             )
         )
     }
@@ -50,7 +50,7 @@ export function getCommentsFromPostID(setComments, postID){
     })
 }
 
-export function postComment(setSession, session, commentText){
+export function postComment(setSession, session, parentPostID, commentText){
     // returns a promise
     //on success, resolve promise to true, this will cause page to reload comments
     //on fail, resolve promise to Error(message), and if necessary trigger a logout by calling logout(setSession, session) in session.js

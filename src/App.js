@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import { useState } from 'react';
-import { sessionContext , checkCookies} from './models/session';
+import { sessionContext , checkCookies, Session} from './models/session';
 import NavBar from './components/NavBar';
 import { BrowserRouter, Routes , Route} from 'react-router';
 
@@ -14,7 +14,10 @@ import UserPage from './pages/UserPage';
 
 function App() {
   const [session, setSession] = useState(undefined);
-  checkCookies(setSession)
+  if (session == undefined){
+    checkCookies(setSession)
+  }
+  
   
   return (
     <div className="App">
