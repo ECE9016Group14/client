@@ -16,7 +16,7 @@ export default function PostPage(){
     const [comments,setComments] = useState(undefined)
     const { session, setSession } = useContext(sessionContext)
 
-    if(! post instanceof Post){
+    if(post == undefined){
         getPostByID(setPost, postID)
     }
     
@@ -64,16 +64,16 @@ export default function PostPage(){
         }
     }
 
-    let likeElement = <p>Loading...</p>
-    if (liked == true){
-        likeElement = <Button onClick={handleUnlike}>Unlike</Button>
-    }else if (liked == false){
-        likeElement = <Button onClick={handleLike}>Like</Button>
-    }
+    let likeElement = undefined
+    
 
     let likeAndCommentArea = <p>Login to like or comment.</p>
     if (session){
-        //TODO
+        if (liked == true){
+            likeElement = <Button onClick={handleUnlike}>Unlike</Button>
+        }else if (liked == false){
+            likeElement = <Button onClick={handleLike}>Like</Button>
+        }
     }
 
     let dispComments = <p>Loading Comments...</p>
