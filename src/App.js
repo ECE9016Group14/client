@@ -13,6 +13,8 @@ import PostPage  from './pages/PostPage';
 import UserPage from './pages/UserPage';
 import NewPost from './pages/NewPost';
 
+export const BACKENDURL = "http://34.135.186.150"
+
 function App() {
   const [session, setSession] = useState(undefined);
   if (session == undefined){

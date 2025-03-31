@@ -1,5 +1,7 @@
 import { createContext } from "react";
 import Cookies from "js-cookie";
+import { BACKENDURL } from "../App";
+import {v4 as uuidv4, v4} from 'uuid';
 //Model for the currently logged in user, mainly their authkey and username.
 
 export const sessionContext = createContext(undefined);
@@ -29,26 +31,56 @@ function SessionFromObj(obj){
 
 export function login(setSession, email, password){
     //use setSession to set new state, and return promise of true or error string
-    console.log(`Email:${email}, Pass:${password}`)
-    if(password === "dev"){
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                let session = new Session("undefined", "devman","2d102b91-883a-4a73-8f84-ade956e9e282")
-                Cookies.set(TOKEN_COOKIE_NAME, JSON.stringify(session), {
-                    expires: 7, 
-                    sameSite: 'strict'
-                })
-                setSession(session) 
-                resolve(true);
-            }, 1000);
-        });
-    }else{
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                resolve(new Error("Invalid Email / Password."));
-            }, 1000);
-        });
-    }
+    const URL = `${BACKENDURL}/user/token`
+    const MEURL = `${BACKENDURL}/user/me`
+
+    return new Promise(async (resolve)=> {
+        let body = `username=${email}&password=${password}`
+
+        let response = await fetch(URL, {
+            method: "POST",
+            body: body,
+            headers:{
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        })
+        let content = await response.json()
+
+        if(!response.ok){
+            resolve(new Error(content.detail))
+            return
+        }
+
+        let token = `${content.token_type} ${content.access_token}`
+
+        response = await fetch(MEURL,{
+            method: "GET",
+            headers:{
+                "Authorization": token
+            }
+        })
+
+        content = await response.json()
+        if(!response.ok){
+            resolve(new Error(content.detail))
+            return
+        }
+
+        let session = new Session(
+            token,
+            content.data.name,
+            content.data.id
+        )
+        Cookies.set(TOKEN_COOKIE_NAME, JSON.stringify(session), {
+                            expires: 1, 
+                            sameSite: 'strict'
+                        })
+
+        setSession(session)
+        resolve(true)
+
+        console.log(content)
+    })
 }
 
 export function logout(setSession, session){
@@ -58,32 +90,36 @@ export function logout(setSession, session){
 
 }
 
-export function checkAuth(setSession, session){
-    //return promise of either true or false
-    //use setSession to force logout if auth is bad
-    //is the current login valid
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve(true);
-        }, 100);
-    });
-}
-
 export function register(displayName, email, password){
     //return promise of true or error string, don't auto login if true, user will be redirected to login page
-    if(password === "dev"){
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                resolve(true);
-            }, 1000);
-        });
-    }else{
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                resolve(new Error("Invalid Email / Password."));
-            }, 1000);
-        });
-    }
+
+    const URL = `${BACKENDURL}/user/register`
+
+    return new Promise(async (resolve)=> {
+        let output = {
+            id: uuidv4(),
+            name: displayName,
+            email: email,
+            remark: "",
+            password: password
+        }
+        
+        let result = await fetch(URL,{
+            method: "POST",
+            body: JSON.stringify(output),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+
+        if(result.ok){
+            resolve(true)
+        }else{
+            resolve(new Error(await result.json()))
+        }
+
+    })
 }
 
 export function checkCookies(setSession){
@@ -107,6 +143,9 @@ export function checkCookies(setSession){
         console.log("Expected Session")
         return
     }
+
+
+
     setSession(token)
     return
 }
