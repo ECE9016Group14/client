@@ -7,25 +7,25 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/airy-charge-454919-p2/social-frontend-app:v1']
   
-  # Step 3: Update the combined deployment for the dev environment.
-  - name: 'gcr.io/cloud-builders/kubectl'
-    args: [
-      'set', 'image', 'deployment/dev-combined-deployment',
-      'frontend-container=gcr.io/airy-charge-454919-p2/social-frontend-app:v1'
-    ]
-    env:
-      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
-      - 'CLOUDSDK_CONTAINER_CLUSTER=dev-cluster'
+  # # Step 3: Update the combined deployment for the dev environment.
+  # - name: 'gcr.io/cloud-builders/kubectl'
+  #   args: [
+  #     'set', 'image', 'deployment/dev-web-deployment',
+  #     'frontend-container=gcr.io/airy-charge-454919-p2/social-frontend-app:v1'
+  #   ]
+  #   env:
+  #     - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+  #     - 'CLOUDSDK_CONTAINER_CLUSTER=dev-cluster'
   
-  # Step 4: Update the combined deployment for the prod environment.
-  - name: 'gcr.io/cloud-builders/kubectl'
-    args: [
-      'set', 'image', 'deployment/prod-combined-deployment',
-      'frontend-container=gcr.io/airy-charge-454919-p2/social-frontend-app:v1'
-    ]
-    env:
-      - 'CLOUDSDK_COMPUTE_ZONE=us-east1-b'
-      - 'CLOUDSDK_CONTAINER_CLUSTER=prod-cluster'
+  # # Step 4: Update the combined deployment for the prod environment.
+  # - name: 'gcr.io/cloud-builders/kubectl'
+  #   args: [
+  #     'set', 'image', 'deployment/prod-web-deployment',
+  #     'frontend-container=gcr.io/airy-charge-454919-p2/social-frontend-app:v1'
+  #   ]
+  #   env:
+  #     - 'CLOUDSDK_COMPUTE_ZONE=us-east1-b'
+  #     - 'CLOUDSDK_CONTAINER_CLUSTER=prod-cluster'
 
 images:
   - 'gcr.io/airy-charge-454919-p2/social-frontend-app:v1'
