@@ -41,7 +41,7 @@ function LoginComponent(){
   }else{
     return(
       <NavLink to="/login" end>
-        Login or Register
+        Login / Register
       </NavLink>
     )
   }
