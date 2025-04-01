@@ -56,8 +56,21 @@ export function changeRemark(setSession, session, newRemark){
         //On fail, promise resolves to error with message
         //if session expired, call logout in session.js
 
+        const URL = `${BACKENDURL}/user/remark?`
     return new Promise(async (resolve)=>{
-        alert("TODO: Currently disabled.")
-        resolve(true)
+        let response = await fetch(URL + new URLSearchParams({
+            remark: newRemark,
+        }).toString(),
+        {
+            method:"PUT",
+            headers: {
+                "Authorization": session.token
+            }
+        })
+        if (!response.ok){
+            resolve(new Error((await response.json()).detail))
+        }else{
+            resolve(true)
+        }
     } )
 }
