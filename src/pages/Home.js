@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 export default function Home(){
     const [posts, setPosts] = useState(undefined)
-    getHomePosts(setPosts)
+    
 
     let output = <h1>Loading...</h1>
 
@@ -13,6 +13,8 @@ export default function Home(){
         for(let post of posts){
             output.push(<PostListing post={post}/>)
         }
+    }else{
+        getHomePosts(setPosts)
     }
 
     return output

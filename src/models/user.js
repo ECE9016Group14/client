@@ -1,3 +1,4 @@
+import { BACKENDURL } from "../App"
 import { sqlToJsDate } from "../utils"
 
 export function User(ID, Name, Remark, CreateTime){
@@ -21,11 +22,24 @@ function parseFromJson(json){
 export function getUser(setUser, userID){
     //gets a user by id, returns a promise
     //on success, promise resolves to true and setUser is used to change page state
+    const URL = `${BACKENDURL}/user/id/${userID}`
 
     return new Promise(async (resolve) =>{
         try{
-            const user = parseFromJson(await(await fetch('/MOCK_USER.json')).text())
-            setUser(user)
+            let response = await fetch(URL)
+            let content = await response.json()
+            if (!response.ok){
+                setUser(new Error(content.detail))
+                resolve(new Error(content.detail) )
+                return
+            }
+
+            setUser(new User(
+                content.data.id,
+                content.data.name,
+                content.data.remark,
+                undefined
+            ))
             resolve(true)
         }catch(e){
             setUser(Error("Unable to get user."))
@@ -43,6 +57,7 @@ export function changeRemark(setSession, session, newRemark){
         //if session expired, call logout in session.js
 
     return new Promise(async (resolve)=>{
+        alert("TODO: Currently disabled.")
         resolve(true)
     } )
 }

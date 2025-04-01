@@ -42,15 +42,15 @@ export default function PostPage(){
         })
     }
 
-    let authorLink = `/u/${post.posterID}`
-    let authorDetails = <NavLink to={authorLink}>Written by {post.posterName}</NavLink>
+    let authorLink = `/u/${post.poster_id}`
+    let authorDetails = <NavLink to={authorLink}>Written by {post.poster_name}</NavLink>
 
     const handleLike = async ()=> {
         let result = await like(setSession, session, postID)
         setLiked(result)
         if (result == true){
             let updated_post = post
-            updated_post.numLikes += 1
+            updated_post.num_likes += 1
             setPost(updated_post)
         }
     }
@@ -59,7 +59,7 @@ export default function PostPage(){
         setLiked(!result)
         if (result == true){
             let updated_post = post
-            updated_post.numLikes -= 1
+            updated_post.num_likes -= 1
             setPost(updated_post)
         }
     }
@@ -135,7 +135,7 @@ export default function PostPage(){
 
     
 
-    const stats = `${post.numLikes} likes.    Posted ${moment(post.postTime).fromNow()}`
+    const stats = `${post.num_likes} likes.    Posted ${moment(post.postTime).fromNow()}`
 
     return <div>
             <h1>{post.title}</h1>

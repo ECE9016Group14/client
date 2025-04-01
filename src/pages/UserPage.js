@@ -46,10 +46,11 @@ export default function UserPage(){
         }
     }
 
-    getUser(setUser, userID)
+    
 
     // handles all cases where user is invalid
     if(user == undefined){
+        getUser(setUser, userID)
         return <h1>Loading...</h1>
     }else if (user instanceof Error){
         return <h1>Error: {user.message}</h1>
@@ -75,10 +76,13 @@ export default function UserPage(){
         </Form>
     }
 
-    getPostsByPosterID(setPosts,user.id)
+    
 
     let postSection = <h1>Loading...</h1>
-    if(posts && (!posts instanceof Array || !posts[0] instanceof Post)){
+    if(posts == undefined){
+        getPostsByPosterID(setPosts,user.id)
+    }
+    else if(posts && (!posts instanceof Array || !posts[0] instanceof Post)){
         postSection = <h1>Error: Received data of unknown type.</h1>
     }else if (posts instanceof Array && posts.length === 0){
         postSection = <p>This user hasn't posted anything yet.</p>
