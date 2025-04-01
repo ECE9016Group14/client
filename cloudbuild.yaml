@@ -28,7 +28,7 @@ steps:
   #     - 'CLOUDSDK_CONTAINER_CLUSTER=prod-cluster'
 
 images:
-  - 'gcr.io/airy-charge-454919-p2/social-frontend-app:v5'
+  - 'gcr.io/airy-charge-454919-p2/social-frontend-app:6'
 
 options:
   logging: 'CLOUD_LOGGING_ONLY'
