@@ -1,0 +1,31 @@
+steps:
+  # Step 1: Build the frontend image using the Dockerfile in the /client folder.
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/airy-charge-454919-p2/social-frontend-app:v3', '.']
+  
+  # Step 2: Push the frontend image to Container Registry.
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/airy-charge-454919-p2/social-frontend-app:v3']
+  
+  # # Step 3: Update the combined deployment for the dev environment.
+  # - name: 'gcr.io/cloud-builders/kubectl'
+  #   args: [
+  #     'set', 'image', 'deployment/dev-combined-deployment',
+  #     'frontend-container=gcr.io/airy-charge-454919-p2/social-frontend-app:v1'
+  #   ]
+  #   env:
+  #     - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+  #     - 'CLOUDSDK_CONTAINER_CLUSTER=dev-cluster'
+  
+  # # Step 4: Update the combined deployment for the prod environment.
+  # - name: 'gcr.io/cloud-builders/kubectl'
+  #   args: [
+  #     'set', 'image', 'deployment/prod-combined-deployment',
+  #     'frontend-container=gcr.io/airy-charge-454919-p2/social-frontend-app:v1'
+  #   ]
+  #   env:
+  #     - 'CLOUDSDK_COMPUTE_ZONE=us-east1-b'
+  #     - 'CLOUDSDK_CONTAINER_CLUSTER=prod-cluster'
+
+images:
+  - 'gcr.io/airy-charge-454919-p2/social-frontend-app:v3'
